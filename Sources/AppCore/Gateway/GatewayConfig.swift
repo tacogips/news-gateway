@@ -163,6 +163,22 @@ public struct GatewayConfig: Codable, Sendable, Equatable {
     }
   }
 
+  /// Returns a copy with the learning LLM overridden (CLI flags or caller
+  /// choice). Setting a vendor implies acp mode; nil arguments keep the
+  /// configured values.
+  public func overridingLLM(vendor: String?, model: String?) -> GatewayConfig {
+    guard vendor != nil || model != nil else { return self }
+    var copy = self
+    if let vendor {
+      copy.llm.vendor = vendor
+      copy.llm.mode = .acp
+    }
+    if let model {
+      copy.llm.model = model
+    }
+    return copy
+  }
+
   /// Effective database path after overrides (argument > env > config > default).
   public func resolvedDBPath(override: String?, environment: [String: String]) -> String {
     GatewayConfig.expand(override ?? environment["NEWS_GATEWAY_DB"] ?? dbPath ?? GatewayConfig.defaultDBPath)

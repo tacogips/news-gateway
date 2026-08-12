@@ -24,7 +24,9 @@ news-gateway --version
 
 Common options: `--config PATH` (default
 `~/.config/news-gateway/config.json`, or `NEWS_GATEWAY_CONFIG`), `--db PATH`
-(overrides config; `NEWS_GATEWAY_DB` also works).
+(overrides config; `NEWS_GATEWAY_DB` also works), and `--llm-vendor NAME` /
+`--llm-model NAME` (override the strategy-learning LLM configured in the
+`llm` config section; `--llm-vendor` implies llm mode `acp`).
 
 ## Behavior
 

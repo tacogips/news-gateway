@@ -88,6 +88,25 @@ private let stubOptions = ACPAgentGatewayLLMClient.Options(vendor: "anthropic", 
   }
 }
 
+@Test func overridingLLMReplacesVendorAndModel() {
+  let base = GatewayConfig(
+    llm: GatewayConfig.LLMConfig(mode: .command, command: ["some-tool"])
+  )
+  let overridden = base.overridingLLM(vendor: "openrouter", model: "openai/gpt-5")
+  #expect(overridden.llm.mode == .acp)
+  #expect(overridden.llm.vendor == "openrouter")
+  #expect(overridden.llm.model == "openai/gpt-5")
+  // Model-only override keeps the configured mode and vendor.
+  let acpBase = GatewayConfig(
+    llm: GatewayConfig.LLMConfig(mode: .acp, vendor: "anthropic", model: "claude-sonnet-5")
+  )
+  let modelOnly = acpBase.overridingLLM(vendor: nil, model: "claude-opus-5")
+  #expect(modelOnly.llm.vendor == "anthropic")
+  #expect(modelOnly.llm.model == "claude-opus-5")
+  // No-op when nothing is passed.
+  #expect(acpBase.overridingLLM(vendor: nil, model: nil) == acpBase)
+}
+
 @Test func llmConfigDecodesACPMode() throws {
   let json = """
   { "llm": { "mode": "acp", "vendor": "openrouter", "model": "openai/gpt-5",

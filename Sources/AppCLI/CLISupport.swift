@@ -9,8 +9,15 @@ struct GlobalOptions: ParsableArguments {
   @Option(name: .long, help: "SQLite database path (default from config or ~/.local/share/news-gateway/)")
   var db: String?
 
+  @Option(name: .long, help: "Override the LLM vendor for strategy learning (anthropic, openai, gemini, openrouter, ...; implies llm mode acp)")
+  var llmVendor: String?
+
+  @Option(name: .long, help: "Override the LLM model for strategy learning")
+  var llmModel: String?
+
   func loadConfig() throws -> GatewayConfig {
     try GatewayConfig.load(path: config, environment: ProcessInfo.processInfo.environment)
+      .overridingLLM(vendor: llmVendor, model: llmModel)
   }
 
   func makeGateway() throws -> NewsGateway {
