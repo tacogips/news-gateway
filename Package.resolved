@@ -1,0 +1,33 @@
+{
+  "originHash" : "a16647162d3576990000ebf09438c399ae09be6b5b9b4c6d66029ab0040cd459",
+  "pins" : [
+    {
+      "identity" : "agent-gateway",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/tacogips/agent-gateway.git",
+      "state" : {
+        "revision" : "e5c6150913355c7768ca21219ede9236b273e1d6",
+        "version" : "0.1.2"
+      }
+    },
+    {
+      "identity" : "swift-argument-parser",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-argument-parser.git",
+      "state" : {
+        "revision" : "6a52f3251125d74daf04fcbd5e6f08a75d074382",
+        "version" : "1.8.2"
+      }
+    },
+    {
+      "identity" : "swiftsoup",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/scinfu/SwiftSoup.git",
+      "state" : {
+        "revision" : "8d6ad267714cac3ae747cefdd21f7a6665006e1f",
+        "version" : "2.13.7"
+      }
+    }
+  ],
+  "version" : 3
+}

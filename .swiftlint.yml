@@ -3,6 +3,11 @@ included:
   - Sources
   - Tests
 
+# String(decoding:as:) is intentional for untrusted web/process bytes:
+# lossy replacement beats dropping the whole document on one bad byte.
+disabled_rules:
+  - optional_data_string_conversion
+
 excluded:
   - .build
   - tmp
