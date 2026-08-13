@@ -8,7 +8,7 @@ import Foundation
 /// This is the default `llm.mode` (`acp`). Vendors are agent-gateway's
 /// (`anthropic`, `openai`, `gemini`, `openrouter`, CLI agents, ...); the
 /// API key is resolved by agent-gateway from the process environment via
-/// `apiKeyEnvironment`, so secrets never pass through news-gateway.
+/// `apiKeyEnvironment`, so secrets never pass through web-gateway.
 public struct ACPAgentGatewayLLMClient: LLMClient {
   public struct Options: Sendable, Equatable {
     public var vendor: String

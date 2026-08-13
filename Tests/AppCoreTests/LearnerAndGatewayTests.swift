@@ -6,8 +6,8 @@ private func makeGateway(
   transport: FakeTransport,
   llm: FakeLLM,
   sleeper: FakeSleeper = FakeSleeper()
-) throws -> NewsGateway {
-  try NewsGateway(
+) throws -> WebGateway {
+  try WebGateway(
     config: GatewayConfig(),
     environment: [:],
     transport: transport,
@@ -116,7 +116,7 @@ private func makeGateway(
   let store = try SQLiteStrategyStore(path: dbPath)
   let strategy = Fixtures.cssStrategy(sourceURL: "https://example.com/news", date: Date(timeIntervalSince1970: 0))
   try await store.save(strategy)
-  let gateway2 = try NewsGateway(
+  let gateway2 = try WebGateway(
     config: GatewayConfig(),
     environment: [:],
     transport: transport,
@@ -159,7 +159,7 @@ private func makeGateway(
   broken.acquisition.url = "https://example.com/old-endpoint"
   try await store.save(broken)
 
-  let gateway = try NewsGateway(
+  let gateway = try WebGateway(
     config: GatewayConfig(),
     environment: [:],
     transport: transport,

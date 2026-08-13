@@ -9,7 +9,7 @@ Use this skill for Formula releases installed with:
 
 ```bash
 brew tap user/tap
-brew install news-gateway
+brew install web-gateway
 ```
 
 Use `.agents/skills/macos-cask-release/SKILL.md` for signed and notarized Cask
@@ -28,8 +28,8 @@ The default Swift formula contract is macOS-only:
 
 | Homebrew platform | Release asset |
 | --- | --- |
-| macOS Apple Silicon | `news-gateway-<version>-darwin-arm64.tar.gz` |
-| macOS Intel | `news-gateway-<version>-darwin-x64.tar.gz` |
+| macOS Apple Silicon | `web-gateway-<version>-darwin-arm64.tar.gz` |
+| macOS Intel | `web-gateway-<version>-darwin-x64.tar.gz` |
 
 Do not add Linux assets unless the project has a reviewed Swift Linux runtime
 contract.
@@ -62,7 +62,7 @@ For a custom tap path:
 
 ```bash
 version="$(tr -d '[:space:]' < VERSION)"
-scripts/render-homebrew-formula.sh "$version" /path/to/homebrew-tap/Formula/news-gateway.rb
+scripts/render-homebrew-formula.sh "$version" /path/to/homebrew-tap/Formula/web-gateway.rb
 ```
 
 ## Publishing Notes
@@ -80,8 +80,8 @@ If publishing is explicitly requested:
 ```bash
 version="$(tr -d '[:space:]' < VERSION)"
 gh release upload "v${version}" \
-  "dist/homebrew/news-gateway-${version}-darwin-arm64.tar.gz" \
-  "dist/homebrew/news-gateway-${version}-darwin-x64.tar.gz" \
+  "dist/homebrew/web-gateway-${version}-darwin-arm64.tar.gz" \
+  "dist/homebrew/web-gateway-${version}-darwin-x64.tar.gz" \
   --repo user/repo \
   --clobber
 ```
@@ -91,11 +91,11 @@ gh release upload "v${version}" \
 From the tap checkout:
 
 ```bash
-ruby -c Formula/news-gateway.rb
-brew audit --strict news-gateway || brew audit --strict --formula news-gateway
-brew install user/tap/news-gateway
-news-gateway --version
-brew test user/tap/news-gateway
+ruby -c Formula/web-gateway.rb
+brew audit --strict web-gateway || brew audit --strict --formula web-gateway
+brew install user/tap/web-gateway
+web-gateway --version
+brew test user/tap/web-gateway
 ```
 
 If online audit fails because of local GitHub credentials or rate limits, run a
@@ -106,7 +106,7 @@ non-online audit and report the limitation.
 After pushing the tap Formula, require the tap's `update-api-metadata.yml`
 workflow to succeed for that commit. Derive the GitHub tap repository from
 `user/tap`, wait for the matching workflow run, then
-verify `api/formula/news-gateway.json` from
+verify `api/formula/web-gateway.json` from
 GitHub Raw. The JSON release is incomplete unless `.versions.stable` equals the
 release version and `.ruby_source_checksum.sha256` equals the SHA-256 of the
 committed Formula Ruby file.

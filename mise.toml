@@ -33,7 +33,7 @@ run = "swift build"
 
 [tasks.run]
 description = "Run the executable"
-run = "swift run news-gateway"
+run = "swift run web-gateway"
 
 [tasks.test]
 description = "Run Swift tests"
@@ -62,7 +62,7 @@ if [ "$#" -eq 0 ]; then
   echo "usage: mise run homebrew:tap-formula -- <version>" >&2
   exit 2
 fi
-scripts/render-homebrew-formula.sh "$1" "../homebrew-tap/Formula/news-gateway.rb"
+scripts/render-homebrew-formula.sh "$1" "../homebrew-tap/Formula/web-gateway.rb"
 '''
 
 [tasks."build:homebrew-cask"]
@@ -80,7 +80,7 @@ if [ "$#" -eq 0 ]; then
   echo "usage: mise run homebrew:tap-cask -- <version>" >&2
   exit 2
 fi
-scripts/render-homebrew-cask.sh "$1" "../homebrew-tap/Casks/news-gateway.rb"
+scripts/render-homebrew-cask.sh "$1" "../homebrew-tap/Casks/web-gateway.rb"
 '''
 
 [tasks."release:homebrew-cask-local"]

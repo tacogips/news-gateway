@@ -164,7 +164,7 @@ enum Fixtures {
 
 func makeTempDBPath() -> String {
   let directory = FileManager.default.temporaryDirectory
-    .appendingPathComponent("news-gateway-tests-\(UUID().uuidString)")
+    .appendingPathComponent("web-gateway-tests-\(UUID().uuidString)")
   try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
   return directory.appendingPathComponent("test.sqlite3").path
 }

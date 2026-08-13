@@ -9,7 +9,7 @@ history.
 
 ## Purpose
 
-`news-gateway` is a news collection gateway. Given a source URL, it fetches
+`web-gateway` is a news collection gateway. Given a source URL, it fetches
 the latest N items from that source. What makes it different from a plain
 scraper is that it does not hard-code per-site parsing logic. Instead it uses
 an LLM (through an agent gateway) once to *learn* how a given URL exposes its
@@ -18,15 +18,15 @@ Subsequent fetches execute the stored strategy deterministically, without an
 LLM call, unless the strategy itself is of the LLM-extraction kind.
 
 The motivation is a personal news pipeline (discovery, dedup, clustering,
-ranking, synthesis). `news-gateway` is the Collector / Source Fetcher layer of
+ranking, synthesis). `web-gateway` is the Collector / Source Fetcher layer of
 that pipeline: it must reliably answer "give me the latest N entries of this
 URL as JSON that matches a known schema".
 
 ## Usage Surfaces
 
-1. Library: the `AppCore` product exposes the `NewsGateway` facade for direct
+1. Library: the `AppCore` product exposes the `WebGateway` facade for direct
    embedding in other Swift programs.
-2. CLI client: the `news-gateway` executable wraps the same facade with
+2. CLI client: the `web-gateway` executable wraps the same facade with
    machine-readable JSON output.
 3. Future: a node in `tacogips/riela` workflows. The riela node wraps the CLI
    (or calls the library). All CLI contracts (input flags, JSON output shape,
@@ -39,7 +39,7 @@ URL as JSON that matches a known schema".
   `libsqlite3-dev` on Linux).
 - `AppCore`: the library. Domain models, strategy execution, learning,
   persistence, scraping backends, LLM client, gateway facade. No CLI parsing.
-- `AppCLI`: `news-gateway` executable, built on `swift-argument-parser`.
+- `AppCLI`: `web-gateway` executable, built on `swift-argument-parser`.
 - `AppCoreTests`: package tests. All external effects (network, processes,
   clock, sleeping, LLM) are behind protocols so tests run with fakes and no
   network.
@@ -70,7 +70,7 @@ products; the default in-process LLM path).
   thin `SQLiteDatabase` wrapper over CSQLite.
 - `Retry/`: `RetryPolicyConfig`, exponential backoff with jitter, `Sleeper`
   protocol.
-- `Gateway/`: `NewsGateway` facade, `GatewayConfig` (file + environment).
+- `Gateway/`: `WebGateway` facade, `GatewayConfig` (file + environment).
 
 ## Core Flow
 
@@ -132,8 +132,8 @@ bumps `version`, and archives the previous body in a revisions table.
 ## Persistence (SQLite)
 
 Single-file SQLite database (default
-`~/.local/share/news-gateway/news-gateway.sqlite3`, overridable via config or
-`NEWS_GATEWAY_DB`). Tables:
+`~/.local/share/web-gateway/web-gateway.sqlite3`, overridable via config or
+`WEB_GATEWAY_DB`). Tables:
 
 - `strategies(id PK, source_url UNIQUE, name, body_json, version, created_at,
   updated_at, success_count, failure_count, last_error, last_fetched_at)`
@@ -225,5 +225,5 @@ Design constraints adopted now so the riela node is a thin wrapper later:
   (fetch is always JSON); diagnostics go to stderr.
 - Stable exit codes (see `command.md`).
 - Fully non-interactive; secrets only via environment.
-- The library facade (`NewsGateway`) is initializable from an in-memory
+- The library facade (`WebGateway`) is initializable from an in-memory
   `GatewayConfig`, so an in-process node embedding needs no config file.

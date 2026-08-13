@@ -3,8 +3,8 @@ set -euo pipefail
 
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 repo_root="$(cd "$script_dir/.." && pwd)"
-artifact_name="news-gateway"
-github_repository="tacogips/news-gateway"
+artifact_name="web-gateway"
+github_repository="tacogips/web-gateway"
 
 usage() {
   cat <<EOF
@@ -89,7 +89,7 @@ release_notes="Signed, notarized, and stapled macOS DMG archives for the Homebre
 if ! gh release view "$release_tag" --repo "$github_repository" >/dev/null 2>&1; then
   gh release create "$release_tag" \
     --repo "$github_repository" \
-    --title "news-gateway $release_tag" \
+    --title "web-gateway $release_tag" \
     --notes "$release_notes"
 fi
 
@@ -101,4 +101,4 @@ printf '\nRendered tap cask: %s\n' "$tap_cask_file"
 printf 'Review, commit, and push the tap change from the tap repository.\n'
 printf 'Then install with:\n'
 printf '  brew tap user/tap\n'
-printf '  brew install --cask news-gateway\n'
+printf '  brew install --cask web-gateway\n'

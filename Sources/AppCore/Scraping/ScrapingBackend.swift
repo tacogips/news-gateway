@@ -39,7 +39,7 @@ public struct HTTPScrapingBackend: ScrapingBackend {
   private let transport: any HTTPTransport
   private let userAgent: String
 
-  public init(transport: any HTTPTransport, userAgent: String = "news-gateway/\(Version.current)") {
+  public init(transport: any HTTPTransport, userAgent: String = "web-gateway/\(Version.current)") {
     self.transport = transport
     self.userAgent = userAgent
   }

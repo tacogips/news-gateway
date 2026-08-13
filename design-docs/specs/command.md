@@ -7,24 +7,24 @@ Accepted (initial implementation)
 ## CLI
 
 ```
-news-gateway fetch <url> [--count N] [--learn-if-missing] [--relearn-on-failure]
+web-gateway fetch <url> [--count N] [--learn-if-missing] [--relearn-on-failure]
                          [--max-attempts N] [--pretty]
                          [--config PATH] [--db PATH]
-news-gateway strategy list [--json]
-news-gateway strategy show <id-or-url> [--json]
-news-gateway strategy learn <url> [--count N] [--hints TEXT]
+web-gateway strategy list [--json]
+web-gateway strategy show <id-or-url> [--json]
+web-gateway strategy learn <url> [--count N] [--hints TEXT]
                                   [--schema-file PATH]
-news-gateway strategy update <id-or-url> [--count N] [--hints TEXT]
+web-gateway strategy update <id-or-url> [--count N] [--hints TEXT]
                                          [--schema-file PATH]
-news-gateway strategy delete <id-or-url>
-news-gateway config init [--path PATH] [--force]
-news-gateway config show
-news-gateway --version
+web-gateway strategy delete <id-or-url>
+web-gateway config init [--path PATH] [--force]
+web-gateway config show
+web-gateway --version
 ```
 
 Common options: `--config PATH` (default
-`~/.config/news-gateway/config.json`, or `NEWS_GATEWAY_CONFIG`), `--db PATH`
-(overrides config; `NEWS_GATEWAY_DB` also works), and `--llm-vendor NAME` /
+`~/.config/web-gateway/config.json`, or `WEB_GATEWAY_CONFIG`), `--db PATH`
+(overrides config; `WEB_GATEWAY_DB` also works), and `--llm-vendor NAME` /
 `--llm-model NAME` (override the strategy-learning LLM configured in the
 `llm` config section; `--llm-vendor` implies llm mode `acp`).
 

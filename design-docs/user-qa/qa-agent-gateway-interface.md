@@ -2,7 +2,7 @@
 
 ## Question
 
-How should news-gateway invoke the user's `agent-gateway` for strategy
+How should web-gateway invoke the user's `agent-gateway` for strategy
 learning and llm-kind extraction?
 
 ## Answer (2026-08-12)

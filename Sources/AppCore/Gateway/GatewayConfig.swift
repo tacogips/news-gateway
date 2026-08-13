@@ -140,14 +140,14 @@ public struct GatewayConfig: Codable, Sendable, Equatable {
 
   public static let `default` = GatewayConfig()
 
-  public static let defaultConfigPath = "~/.config/news-gateway/config.json"
-  public static let defaultDBPath = "~/.local/share/news-gateway/news-gateway.sqlite3"
+  public static let defaultConfigPath = "~/.config/web-gateway/config.json"
+  public static let defaultDBPath = "~/.local/share/web-gateway/web-gateway.sqlite3"
 
   /// Loads config from `path` (or the default location). A missing file at
   /// the default location falls back to defaults; a missing explicit path is
   /// an error.
   public static func load(path: String?, environment: [String: String]) throws -> GatewayConfig {
-    let explicit = path ?? environment["NEWS_GATEWAY_CONFIG"]
+    let explicit = path ?? environment["WEB_GATEWAY_CONFIG"]
     let candidate = expand(explicit ?? defaultConfigPath)
     guard FileManager.default.fileExists(atPath: candidate) else {
       if explicit != nil {
@@ -183,7 +183,7 @@ public struct GatewayConfig: Codable, Sendable, Equatable {
 
   /// Effective database path after overrides (argument > env > config > default).
   public func resolvedDBPath(override: String?, environment: [String: String]) -> String {
-    GatewayConfig.expand(override ?? environment["NEWS_GATEWAY_DB"] ?? dbPath ?? GatewayConfig.defaultDBPath)
+    GatewayConfig.expand(override ?? environment["WEB_GATEWAY_DB"] ?? dbPath ?? GatewayConfig.defaultDBPath)
   }
 
   public static func expand(_ path: String) -> String {
@@ -192,7 +192,7 @@ public struct GatewayConfig: Codable, Sendable, Equatable {
     return home + path.dropFirst(1)
   }
 
-  /// Commented template written by `news-gateway config init`.
+  /// Commented template written by `web-gateway config init`.
   public static let templateJSON = """
   {
     "dbPath": null,

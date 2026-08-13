@@ -2,7 +2,7 @@ import Foundation
 
 /// The library facade. Owns the store, backends, learner, and retry policy.
 /// The CLI and (later) riela nodes are thin wrappers over this actor.
-public actor NewsGateway {
+public actor WebGateway {
   private let store: any StrategyStore
   private let executor: StrategyExecutor
   private let learner: StrategyLearner

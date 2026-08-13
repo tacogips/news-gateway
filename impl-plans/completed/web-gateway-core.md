@@ -9,7 +9,7 @@ Turn the scaffold into the actual news collection gateway: fetch the latest N
 items from a URL via pluggable scraping backends, learn per-source extraction
 strategies with an LLM once, persist them in SQLite, execute them
 deterministically with retry/backoff, and expose everything as both a library
-(`AppCore`) and a CLI (`news-gateway`) with riela-node-ready JSON contracts.
+(`AppCore`) and a CLI (`web-gateway`) with riela-node-ready JSON contracts.
 
 ## Deliverables
 
@@ -21,7 +21,7 @@ deterministically with retry/backoff, and expose everything as both a library
 - [x] LLM client protocol + agent-gateway command/http client
 - [x] StrategyLearner with propose/execute/repair loop
 - [x] Retry with exponential backoff and jitter (injectable sleeper)
-- [x] `NewsGateway` facade + `GatewayConfig` (file + env)
+- [x] `WebGateway` facade + `GatewayConfig` (file + env)
 - [x] CLI: fetch / strategy list-show-learn-update-delete / config init-show
 - [x] Tests with fakes (no network); build + lint clean
 - [x] Linux CI installs libsqlite3-dev

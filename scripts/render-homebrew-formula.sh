@@ -3,8 +3,8 @@ set -euo pipefail
 
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 repo_root="$(cd "$script_dir/.." && pwd)"
-artifact_name="news-gateway"
-product="news-gateway"
+artifact_name="web-gateway"
+product="web-gateway"
 
 usage() {
   cat <<EOF
@@ -56,7 +56,7 @@ main() {
   version="$1"
   output="${2:-$repo_root/Formula/$artifact_name.rb}"
   release_dir="${RELEASE_DIR:-$repo_root/dist/homebrew}"
-  release_base_url="${RELEASE_BASE_URL:-https://github.com/tacogips/news-gateway/releases/download/v$version}"
+  release_base_url="${RELEASE_BASE_URL:-https://github.com/tacogips/web-gateway/releases/download/v$version}"
 
   local darwin_arm64_sha darwin_x64_sha
   darwin_arm64_sha="$(sha_for_target "$version" darwin-arm64 "$release_dir")"
@@ -64,9 +64,9 @@ main() {
 
   mkdir -p "$(dirname "$output")"
   cat > "$output" <<EOF
-class NewsGateway < Formula
+class WebGateway < Formula
   desc "News collection gateway with LLM-learned, SQLite-persisted fetch strategies"
-  homepage "https://github.com/tacogips/news-gateway"
+  homepage "https://github.com/tacogips/web-gateway"
   version "$version"
   license "MIT"
 

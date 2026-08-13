@@ -7,7 +7,7 @@
 
 Remaining accuracy/robustness items from the project goal after round 1
 (feed autodiscovery, item normalization, timeouts — see
-`impl-plans/completed/news-gateway-precision-1.md`).
+`impl-plans/completed/web-gateway-precision-1.md`).
 
 ## Deliverables
 

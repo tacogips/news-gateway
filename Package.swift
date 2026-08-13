@@ -3,13 +3,13 @@
 import PackageDescription
 
 let package = Package(
-  name: "news-gateway",
+  name: "web-gateway",
   platforms: [
     .macOS(.v14)
   ],
   products: [
     .library(name: "AppCore", targets: ["AppCore"]),
-    .executable(name: "news-gateway", targets: ["AppCLI"])
+    .executable(name: "web-gateway", targets: ["AppCLI"])
   ],
   dependencies: [
     .package(url: "https://github.com/apple/swift-argument-parser.git", from: "1.5.0"),

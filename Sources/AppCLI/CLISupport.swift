@@ -3,10 +3,10 @@ import ArgumentParser
 import Foundation
 
 struct GlobalOptions: ParsableArguments {
-  @Option(name: .long, help: "Config file path (default: ~/.config/news-gateway/config.json)")
+  @Option(name: .long, help: "Config file path (default: ~/.config/web-gateway/config.json)")
   var config: String?
 
-  @Option(name: .long, help: "SQLite database path (default from config or ~/.local/share/news-gateway/)")
+  @Option(name: .long, help: "SQLite database path (default from config or ~/.local/share/web-gateway/)")
   var db: String?
 
   @Option(name: .long, help: "Override the LLM vendor for strategy learning (anthropic, openai, gemini, openrouter, ...; implies llm mode acp)")
@@ -20,8 +20,8 @@ struct GlobalOptions: ParsableArguments {
       .overridingLLM(vendor: llmVendor, model: llmModel)
   }
 
-  func makeGateway() throws -> NewsGateway {
-    try NewsGateway(config: try loadConfig(), dbPathOverride: db)
+  func makeGateway() throws -> WebGateway {
+    try WebGateway(config: try loadConfig(), dbPathOverride: db)
   }
 }
 

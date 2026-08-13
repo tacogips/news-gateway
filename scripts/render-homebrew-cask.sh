@@ -3,8 +3,8 @@ set -euo pipefail
 
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 repo_root="$(cd "$script_dir/.." && pwd)"
-artifact_name="news-gateway"
-product="news-gateway"
+artifact_name="web-gateway"
+product="web-gateway"
 
 usage() {
   cat <<EOF
@@ -55,7 +55,7 @@ main() {
   version="$1"
   output="${2:-$repo_root/Casks/$artifact_name.rb}"
   release_dir="${CASK_RELEASE_DIR:-$repo_root/dist/homebrew-cask}"
-  release_base_url="${CASK_RELEASE_BASE_URL:-https://github.com/tacogips/news-gateway/releases/download/v$version}"
+  release_base_url="${CASK_RELEASE_BASE_URL:-https://github.com/tacogips/web-gateway/releases/download/v$version}"
 
   local darwin_arm64_sha darwin_x64_sha
   darwin_arm64_sha="$(sha_for_target "$version" darwin-arm64 "$release_dir")"
@@ -63,7 +63,7 @@ main() {
 
   mkdir -p "$(dirname "$output")"
   cat > "$output" <<EOF
-cask "news-gateway" do
+cask "web-gateway" do
   version "$version"
   arch arm: "darwin-arm64", intel: "darwin-x64"
 
@@ -71,10 +71,10 @@ cask "news-gateway" do
          intel: "$darwin_x64_sha"
 
   url "$release_base_url/$artifact_name-#{version}-#{arch}.dmg",
-      verified: "github.com/tacogips/news-gateway/releases/download/"
-  name "news-gateway"
+      verified: "github.com/tacogips/web-gateway/releases/download/"
+  name "web-gateway"
   desc "A Swift command line tool"
-  homepage "https://github.com/tacogips/news-gateway"
+  homepage "https://github.com/tacogips/web-gateway"
 
   livecheck do
     url :url

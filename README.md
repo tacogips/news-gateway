@@ -1,4 +1,4 @@
-# news-gateway
+# web-gateway
 
 A news collection gateway. Given a source URL, it fetches the latest N items
 as JSON. Instead of hard-coding per-site parsers, it uses an LLM (through
@@ -13,19 +13,19 @@ exponential backoff. Usable as a CLI client and as a Swift library
 
 ```bash
 # Learn a strategy for a source (uses the configured LLM), then fetch:
-news-gateway fetch https://example.com/news --count 10 --learn-if-missing
+web-gateway fetch https://example.com/news --count 10 --learn-if-missing
 
 # Manage strategies:
-news-gateway strategy list
-news-gateway strategy show https://example.com/news
-news-gateway strategy learn https://example.com/news --hints "use the RSS feed" \
+web-gateway strategy list
+web-gateway strategy show https://example.com/news
+web-gateway strategy learn https://example.com/news --hints "use the RSS feed" \
   --schema-file item-schema.json
-news-gateway strategy update https://example.com/news
-news-gateway strategy delete https://example.com/news
+web-gateway strategy update https://example.com/news
+web-gateway strategy delete https://example.com/news
 
 # Configuration (backends, LLM, retry defaults):
-news-gateway config init
-news-gateway config show
+web-gateway config init
+web-gateway config show
 ```
 
 Scraping backends: plain HTTP (default), Firecrawl (`FIRECRAWL_API_KEY`),
@@ -60,7 +60,7 @@ Library use:
 ```swift
 import AppCore
 
-let gateway = try NewsGateway(config: .default)
+let gateway = try WebGateway(config: .default)
 let output = try await gateway.fetchLatest(
   url: "https://example.com/news", count: 10, learnIfMissing: true)
 ```
@@ -74,14 +74,14 @@ See `design-docs/specs/architecture.md` for the design and
 mise install
 mise run build
 mise run test
-swift run news-gateway --help
+swift run web-gateway --help
 ```
 
 The package uses Swift Package Manager with:
 
 - Library target: `AppCore`
 - Executable target: `AppCLI`
-- Installed executable: `news-gateway`
+- Installed executable: `web-gateway`
 
 Swift target names and type names must be valid Swift identifiers. If the project
 name contains hyphens, keep `PROJECT_NAME` and `EXECUTABLE_NAME` hyphenated as
@@ -112,7 +112,7 @@ Install from the tap after the formula is published:
 
 ```bash
 brew tap user/tap
-brew install news-gateway
+brew install web-gateway
 ```
 
 ## Homebrew Cask

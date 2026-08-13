@@ -3,8 +3,8 @@ set -euo pipefail
 
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 repo_root="$(cd "$script_dir/.." && pwd)"
-product="news-gateway"
-artifact_name="news-gateway"
+product="web-gateway"
+artifact_name="web-gateway"
 
 usage() {
   cat <<EOF

@@ -12,7 +12,7 @@ struct ConfigCommand: AsyncParsableCommand {
   struct Init: AsyncParsableCommand {
     static let configuration = CommandConfiguration(abstract: "Write a default config template.")
 
-    @Option(name: .long, help: "Destination path (default: ~/.config/news-gateway/config.json)")
+    @Option(name: .long, help: "Destination path (default: ~/.config/web-gateway/config.json)")
     var path: String?
 
     @Flag(name: .long, help: "Overwrite an existing file")

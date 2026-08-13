@@ -9,4 +9,4 @@ specification.
 - 2026-08-12: `LLMJSONPayload` keeps defensive JSON extraction (fences,
   brace matching) because agent-gateway exposes no JSON-mode parameter.
 - Politeness/rate limiting, replay fixtures, deeper schema validation, and
-  batch fetch are planned in `impl-plans/active/news-gateway-precision-2.md`.
+  batch fetch are planned in `impl-plans/active/web-gateway-precision-2.md`.

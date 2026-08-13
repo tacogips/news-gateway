@@ -1,7 +1,7 @@
 import Foundation
 
 /// Result of fetching the latest items from a source. This is the stable
-/// JSON contract printed by `news-gateway fetch` and consumed by riela nodes.
+/// JSON contract printed by `web-gateway fetch` and consumed by riela nodes.
 public struct FetchOutput: Codable, Sendable, Equatable {
   public let sourceURL: String
   public let strategyID: String
