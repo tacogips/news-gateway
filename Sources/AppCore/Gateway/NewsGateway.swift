@@ -24,7 +24,7 @@ public actor NewsGateway {
     let transport = transport ?? URLSessionTransport()
     let runner = processRunner ?? FoundationProcessRunner()
 
-    let registry = Self.buildRegistry(config: config, environment: environment, transport: transport, runner: runner)
+    let registry = Self.buildRegistry(config: config, environment: environment, transport: transport)
     let llmClient = llm ?? Self.buildLLMClient(config: config.llm, environment: environment, transport: transport, runner: runner)
     let executor = StrategyExecutor(
       backends: registry,
@@ -182,8 +182,7 @@ public actor NewsGateway {
   private static func buildRegistry(
     config: GatewayConfig,
     environment: [String: String],
-    transport: any HTTPTransport,
-    runner: any ProcessRunner
+    transport: any HTTPTransport
   ) -> BackendRegistry {
     var backends: [any ScrapingBackend] = [HTTPScrapingBackend(transport: transport)]
 
@@ -209,12 +208,16 @@ public actor NewsGateway {
       )
     }
 
-    if let playwright = config.playwright, !playwright.command.isEmpty {
+    let kitesurfAccountEnv = config.kitesurf?.accountIDEnv ?? "CLOUDFLARE_ACCOUNT_ID"
+    let kitesurfTokenEnv = config.kitesurf?.apiTokenEnv ?? "CLOUDFLARE_API_TOKEN"
+    if let accountID = environment[kitesurfAccountEnv], !accountID.isEmpty,
+       let apiToken = environment[kitesurfTokenEnv], !apiToken.isEmpty {
       backends.append(
-        PlaywrightCommandBackend(
-          runner: runner,
-          commandTemplate: playwright.command,
-          timeoutSeconds: playwright.timeoutSeconds ?? 120
+        KitesurfBackend(
+          transport: transport,
+          accountID: accountID,
+          apiToken: apiToken,
+          baseURL: config.kitesurf?.baseURL ?? "https://api.cloudflare.com/client/v4"
         )
       )
     }

@@ -23,14 +23,16 @@ public struct GatewayConfig: Codable, Sendable, Equatable {
     }
   }
 
-  public struct PlaywrightConfig: Codable, Sendable, Equatable {
-    /// Command template printing rendered HTML to stdout; {url} is replaced.
-    public var command: [String]
-    public var timeoutSeconds: Int?
+  public struct KitesurfConfig: Codable, Sendable, Equatable {
+    /// Environment variable names containing Cloudflare Browser Run credentials.
+    public var accountIDEnv: String?
+    public var apiTokenEnv: String?
+    public var baseURL: String?
 
-    public init(command: [String], timeoutSeconds: Int? = nil) {
-      self.command = command
-      self.timeoutSeconds = timeoutSeconds
+    public init(accountIDEnv: String? = nil, apiTokenEnv: String? = nil, baseURL: String? = nil) {
+      self.accountIDEnv = accountIDEnv
+      self.apiTokenEnv = apiTokenEnv
+      self.baseURL = baseURL
     }
   }
 
@@ -99,17 +101,17 @@ public struct GatewayConfig: Codable, Sendable, Equatable {
   public var defaultRetry: RetryPolicyConfig
   public var firecrawl: FirecrawlConfig?
   public var zenrows: ZenRowsConfig?
-  public var playwright: PlaywrightConfig?
+  public var kitesurf: KitesurfConfig?
   public var llm: LLMConfig
   public var learning: LearningConfig
 
   public init(
     dbPath: String? = nil,
-    defaultBackends: [BackendName] = [.http],
+    defaultBackends: [BackendName] = [.http, .kitesurf],
     defaultRetry: RetryPolicyConfig = .default,
     firecrawl: FirecrawlConfig? = nil,
     zenrows: ZenRowsConfig? = nil,
-    playwright: PlaywrightConfig? = nil,
+    kitesurf: KitesurfConfig? = nil,
     llm: LLMConfig = LLMConfig(),
     learning: LearningConfig = LearningConfig()
   ) {
@@ -118,7 +120,7 @@ public struct GatewayConfig: Codable, Sendable, Equatable {
     self.defaultRetry = defaultRetry
     self.firecrawl = firecrawl
     self.zenrows = zenrows
-    self.playwright = playwright
+    self.kitesurf = kitesurf
     self.llm = llm
     self.learning = learning
   }
@@ -127,11 +129,11 @@ public struct GatewayConfig: Codable, Sendable, Equatable {
   public init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
     dbPath = try container.decodeIfPresent(String.self, forKey: .dbPath)
-    defaultBackends = try container.decodeIfPresent([BackendName].self, forKey: .defaultBackends) ?? [.http]
+    defaultBackends = try container.decodeIfPresent([BackendName].self, forKey: .defaultBackends) ?? [.http, .kitesurf]
     defaultRetry = try container.decodeIfPresent(RetryPolicyConfig.self, forKey: .defaultRetry) ?? .default
     firecrawl = try container.decodeIfPresent(FirecrawlConfig.self, forKey: .firecrawl)
     zenrows = try container.decodeIfPresent(ZenRowsConfig.self, forKey: .zenrows)
-    playwright = try container.decodeIfPresent(PlaywrightConfig.self, forKey: .playwright)
+    kitesurf = try container.decodeIfPresent(KitesurfConfig.self, forKey: .kitesurf)
     llm = try container.decodeIfPresent(LLMConfig.self, forKey: .llm) ?? LLMConfig()
     learning = try container.decodeIfPresent(LearningConfig.self, forKey: .learning) ?? LearningConfig()
   }
@@ -194,7 +196,7 @@ public struct GatewayConfig: Codable, Sendable, Equatable {
   public static let templateJSON = """
   {
     "dbPath": null,
-    "defaultBackends": ["http"],
+    "defaultBackends": ["http", "kitesurf"],
     "defaultRetry": {
       "maxAttempts": 3,
       "initialDelayMs": 500,
@@ -204,7 +206,10 @@ public struct GatewayConfig: Codable, Sendable, Equatable {
     },
     "firecrawl": { "apiKeyEnv": "FIRECRAWL_API_KEY" },
     "zenrows": { "apiKeyEnv": "ZENROWS_API_KEY" },
-    "playwright": { "command": ["node", "scripts/playwright-fetch.mjs", "{url}"] },
+    "kitesurf": {
+      "accountIDEnv": "CLOUDFLARE_ACCOUNT_ID",
+      "apiTokenEnv": "CLOUDFLARE_API_TOKEN"
+    },
     "llm": {
       "mode": "acp",
       "vendor": "anthropic",

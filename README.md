@@ -29,8 +29,13 @@ news-gateway config show
 ```
 
 Scraping backends: plain HTTP (default), Firecrawl (`FIRECRAWL_API_KEY`),
-ZenRows (`ZENROWS_API_KEY`), and a Playwright command adapter
-(`scripts/playwright-fetch.mjs`). Strategies pick an ordered backend chain.
+ZenRows (`ZENROWS_API_KEY`), and Cloudflare Kitesurf through Browser Run
+(`CLOUDFLARE_ACCOUNT_ID` and `CLOUDFLARE_API_TOKEN`). Strategies pick an
+ordered backend chain. Kitesurf is the browser-rendering backend; configure
+the token with `Browser Rendering - Edit` permission and select `kitesurf` in
+a strategy when JavaScript rendering is required. The default chain tries
+plain HTTP first for feeds and static pages, then Kitesurf as its browser
+fallback.
 
 Strategy learning runs through
 [tacogips/agent-gateway](https://github.com/tacogips/agent-gateway) hosted

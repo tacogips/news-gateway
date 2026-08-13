@@ -12,8 +12,8 @@ public struct ProcessResult: Sendable, Equatable {
   }
 }
 
-/// Injection point for subprocess execution (playwright backend, command-mode
-/// LLM client); tests use a fake. A nil timeout means no limit.
+/// Injection point for subprocess execution by command-mode LLM clients;
+/// tests use a fake. A nil timeout means no limit.
 public protocol ProcessRunner: Sendable {
   func run(command: [String], stdin: String?, timeoutSeconds: Int?) async throws -> ProcessResult
 }

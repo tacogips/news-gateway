@@ -17,9 +17,11 @@ fi
 '''
 
 [tools]
+node = "lts"
 swift = "6.3.3"
 swiftlint = "latest"
 gitleaks = "latest"
+wrangler = "latest"
 
 [tasks.default]
 description = "Show available tasks"

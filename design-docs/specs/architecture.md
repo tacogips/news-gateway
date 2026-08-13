@@ -58,7 +58,7 @@ products; the default in-process LLM path).
   `JSONExtractor`, LLM extraction), `ItemNormalizer` (+ `ItemDateParser`),
   `JSONPathExpression` (minimal dot/index paths).
 - `Scraping/`: `ScrapingBackend` protocol, `HTTPScrapingBackend`,
-  `FirecrawlBackend`, `ZenRowsBackend`, `PlaywrightCommandBackend`,
+  `FirecrawlBackend`, `ZenRowsBackend`, `KitesurfBackend`,
   `BackendRegistry`, `HTTPTransport` protocol (URLSession-backed by default),
   `ProcessRunner` protocol (timeout-enforcing subprocess execution).
 - `LLM/`: `LLMClient` protocol, `ACPAgentGatewayLLMClient` (default:
@@ -109,7 +109,7 @@ this URL, and what shape do the items have". Fields:
 
 - `id`, `sourceURL` (normalized), `name`, `notes`, `version`
 - `backends`: ordered backend names to try (`http`, `firecrawl`, `zenrows`,
-  `playwright`)
+  `kitesurf`)
 - `acquisition`: URL to fetch (may differ from `sourceURL`, e.g. a discovered
   RSS feed or JSON API), format hint (`html` / `json` / `text`), `renderJS`,
   optional headers. The URL may contain `{count}` which is substituted at
@@ -149,10 +149,10 @@ All backends implement `ScrapingBackend.fetch(ScrapeRequest) -> ScrapedContent`.
 - `http`: plain URLSession GET. Default first choice.
 - `firecrawl`: Firecrawl scrape API (`FIRECRAWL_API_KEY`).
 - `zenrows`: ZenRows API (`ZENROWS_API_KEY`), supports `js_render`.
-- `playwright`: runs a configurable local command (default:
-  `node scripts/playwright-fetch.mjs {url}`) that prints rendered HTML to
-  stdout. Kept as a command adapter so any headless-browser tool can be
-  substituted.
+- `kitesurf`: calls Cloudflare Browser Run's `/content` Quick Action with
+  `browser=kitesurf`, using `CLOUDFLARE_ACCOUNT_ID` and
+  `CLOUDFLARE_API_TOKEN` by default. This is the primary browser-rendering
+  backend for JavaScript-dependent sources.
 
 The executor walks the strategy's backend list in order and uses the first
 success. API keys come only from environment variables named in config; they
@@ -205,8 +205,7 @@ on real sites.
 ## Timeouts
 
 - HTTP: URLSession request timeout (60s default).
-- Playwright command: `playwright.timeoutSeconds` (default 120); the
-  process is terminated on expiry.
+- Kitesurf: uses the shared HTTP transport timeout (60s default).
 - Command-mode LLM: 300s default. All subprocess execution goes through
   `ProcessRunner`, which enforces the deadline with a watchdog.
 

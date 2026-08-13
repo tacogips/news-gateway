@@ -5,7 +5,27 @@ public enum BackendName: String, Codable, Sendable, CaseIterable {
   case http
   case firecrawl
   case zenrows
-  case playwright
+  case kitesurf
+
+  public init(from decoder: Decoder) throws {
+    let value = try decoder.singleValueContainer().decode(String.self)
+    if value == "playwright" {
+      self = .kitesurf
+      return
+    }
+    guard let backend = BackendName(rawValue: value) else {
+      throw DecodingError.dataCorruptedError(
+        in: try decoder.singleValueContainer(),
+        debugDescription: "Unknown scraping backend: \(value)"
+      )
+    }
+    self = backend
+  }
+
+  public func encode(to encoder: Encoder) throws {
+    var container = encoder.singleValueContainer()
+    try container.encode(rawValue)
+  }
 }
 
 /// Content format hint for acquisition and extraction.

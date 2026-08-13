@@ -132,40 +132,6 @@ public struct ZenRowsBackend: ScrapingBackend {
   }
 }
 
-/// Runs a local command (default: a Playwright script) that prints rendered
-/// HTML to stdout. `{url}` in the command template is replaced with the
-/// target URL.
-public struct PlaywrightCommandBackend: ScrapingBackend {
-  public let name = BackendName.playwright
-  private let runner: any ProcessRunner
-  private let commandTemplate: [String]
-  private let timeoutSeconds: Int
-
-  public init(runner: any ProcessRunner, commandTemplate: [String], timeoutSeconds: Int = 120) {
-    self.runner = runner
-    self.commandTemplate = commandTemplate
-    self.timeoutSeconds = timeoutSeconds
-  }
-
-  public func fetch(_ request: ScrapeRequest) async throws -> ScrapedContent {
-    guard !commandTemplate.isEmpty else {
-      throw GatewayError.configuration(message: "playwright backend has no command configured")
-    }
-    let command = commandTemplate.map { $0.replacingOccurrences(of: "{url}", with: request.url) }
-    let result = try await runner.run(command: command, stdin: nil, timeoutSeconds: timeoutSeconds)
-    guard result.exitCode == 0 else {
-      throw GatewayError.backend(
-        name: "playwright",
-        message: "Command exited with \(result.exitCode): \(result.stderr.prefix(300))"
-      )
-    }
-    guard !result.stdout.isEmpty else {
-      throw GatewayError.backend(name: "playwright", message: "Command produced no output")
-    }
-    return ScrapedContent(url: request.url, body: result.stdout)
-  }
-}
-
 /// Resolves backend names to configured backend instances.
 public struct BackendRegistry: Sendable {
   private let backends: [BackendName: any ScrapingBackend]
