@@ -36,6 +36,32 @@ public struct GatewayConfig: Codable, Sendable, Equatable {
     }
   }
 
+  public struct PlaywrightConfig: Codable, Sendable, Equatable {
+    /// Command template printing rendered HTML to stdout. `{url}` and
+    /// `{headers}` are replaced before execution.
+    public var command: [String]
+    public var timeoutSeconds: Int?
+
+    public init(
+      command: [String] = ["node", "scripts/playwright-fetch.mjs", "{url}", "{headers}"],
+      timeoutSeconds: Int? = nil
+    ) {
+      self.command = command
+      self.timeoutSeconds = timeoutSeconds
+    }
+  }
+
+  public struct AgentBrowserConfig: Codable, Sendable, Equatable {
+    /// Command prefix used to invoke agent-browser, normally just its binary.
+    public var command: [String]
+    public var timeoutSeconds: Int?
+
+    public init(command: [String] = ["agent-browser"], timeoutSeconds: Int? = nil) {
+      self.command = command
+      self.timeoutSeconds = timeoutSeconds
+    }
+  }
+
   public enum LLMMode: String, Codable, Sendable {
     /// agent-gateway hosted in-process over ACP (default).
     case acp
@@ -101,7 +127,9 @@ public struct GatewayConfig: Codable, Sendable, Equatable {
   public var defaultRetry: RetryPolicyConfig
   public var firecrawl: FirecrawlConfig?
   public var zenrows: ZenRowsConfig?
+  public var playwright: PlaywrightConfig?
   public var kitesurf: KitesurfConfig?
+  public var agentBrowser: AgentBrowserConfig?
   public var llm: LLMConfig
   public var learning: LearningConfig
 
@@ -111,7 +139,9 @@ public struct GatewayConfig: Codable, Sendable, Equatable {
     defaultRetry: RetryPolicyConfig = .default,
     firecrawl: FirecrawlConfig? = nil,
     zenrows: ZenRowsConfig? = nil,
+    playwright: PlaywrightConfig? = PlaywrightConfig(),
     kitesurf: KitesurfConfig? = nil,
+    agentBrowser: AgentBrowserConfig? = AgentBrowserConfig(),
     llm: LLMConfig = LLMConfig(),
     learning: LearningConfig = LearningConfig()
   ) {
@@ -120,7 +150,9 @@ public struct GatewayConfig: Codable, Sendable, Equatable {
     self.defaultRetry = defaultRetry
     self.firecrawl = firecrawl
     self.zenrows = zenrows
+    self.playwright = playwright
     self.kitesurf = kitesurf
+    self.agentBrowser = agentBrowser
     self.llm = llm
     self.learning = learning
   }
@@ -133,7 +165,13 @@ public struct GatewayConfig: Codable, Sendable, Equatable {
     defaultRetry = try container.decodeIfPresent(RetryPolicyConfig.self, forKey: .defaultRetry) ?? .default
     firecrawl = try container.decodeIfPresent(FirecrawlConfig.self, forKey: .firecrawl)
     zenrows = try container.decodeIfPresent(ZenRowsConfig.self, forKey: .zenrows)
+    playwright = container.contains(.playwright)
+      ? try container.decodeIfPresent(PlaywrightConfig.self, forKey: .playwright)
+      : PlaywrightConfig()
     kitesurf = try container.decodeIfPresent(KitesurfConfig.self, forKey: .kitesurf)
+    agentBrowser = container.contains(.agentBrowser)
+      ? try container.decodeIfPresent(AgentBrowserConfig.self, forKey: .agentBrowser)
+      : AgentBrowserConfig()
     llm = try container.decodeIfPresent(LLMConfig.self, forKey: .llm) ?? LLMConfig()
     learning = try container.decodeIfPresent(LearningConfig.self, forKey: .learning) ?? LearningConfig()
   }
@@ -206,9 +244,17 @@ public struct GatewayConfig: Codable, Sendable, Equatable {
     },
     "firecrawl": { "apiKeyEnv": "FIRECRAWL_API_KEY" },
     "zenrows": { "apiKeyEnv": "ZENROWS_API_KEY" },
+    "playwright": {
+      "command": ["node", "scripts/playwright-fetch.mjs", "{url}", "{headers}"],
+      "timeoutSeconds": 120
+    },
     "kitesurf": {
       "accountIDEnv": "CLOUDFLARE_ACCOUNT_ID",
       "apiTokenEnv": "CLOUDFLARE_API_TOKEN"
+    },
+    "agentBrowser": {
+      "command": ["agent-browser"],
+      "timeoutSeconds": 120
     },
     "llm": {
       "mode": "acp",

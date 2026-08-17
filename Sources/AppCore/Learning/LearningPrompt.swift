@@ -15,7 +15,7 @@ enum LearningPrompt {
   {
     "name": "short human-readable strategy name",
     "notes": "optional: what the source is, caveats",
-    "backends": ["http"],            // ordered subset of: http, firecrawl, zenrows, kitesurf
+    "backends": ["http"],            // ordered subset of: http, firecrawl, zenrows, playwright, kitesurf, agent-browser
     "acquisition": {
       "url": "URL to fetch (feed/API endpoint if one exists; may contain {count})",
       "format": "html" | "json" | "text",

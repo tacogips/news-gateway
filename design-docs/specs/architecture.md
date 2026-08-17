@@ -109,7 +109,7 @@ this URL, and what shape do the items have". Fields:
 
 - `id`, `sourceURL` (normalized), `name`, `notes`, `version`
 - `backends`: ordered backend names to try (`http`, `firecrawl`, `zenrows`,
-  `kitesurf`)
+  `playwright`, `kitesurf`, `agent-browser`)
 - `acquisition`: URL to fetch (may differ from `sourceURL`, e.g. a discovered
   RSS feed or JSON API), format hint (`html` / `json` / `text`), `renderJS`,
   optional headers. The URL may contain `{count}` which is substituted at
@@ -149,14 +149,20 @@ All backends implement `ScrapingBackend.fetch(ScrapeRequest) -> ScrapedContent`.
 - `http`: plain URLSession GET. Default first choice.
 - `firecrawl`: Firecrawl scrape API (`FIRECRAWL_API_KEY`).
 - `zenrows`: ZenRows API (`ZENROWS_API_KEY`), supports `js_render`.
+- `playwright`: runs the configured local Playwright command and reads the
+  rendered HTML from stdout. The default command uses
+  `scripts/playwright-fetch.mjs`.
 - `kitesurf`: calls Cloudflare Browser Run's `/content` Quick Action with
   `browser=kitesurf`, using `CLOUDFLARE_ACCOUNT_ID` and
   `CLOUDFLARE_API_TOKEN` by default. This is the primary browser-rendering
   backend for JavaScript-dependent sources.
+- `agent-browser`: opens the URL in an isolated local agent-browser session,
+  extracts the final DOM, and closes the session after each fetch.
 
 The executor walks the strategy's backend list in order and uses the first
 success. API keys come only from environment variables named in config; they
-are never persisted in strategies or the database.
+are never persisted in strategies or the database. Local browser command
+prefixes and timeouts are configurable under `playwright` and `agentBrowser`.
 
 ## LLM Access (agent-gateway)
 

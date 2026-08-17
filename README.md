@@ -15,6 +15,21 @@ exponential backoff. Usable as a CLI client and as a Swift library
 # Learn a strategy for a source (uses the configured LLM), then fetch:
 web-gateway fetch https://example.com/news --count 10 --learn-if-missing
 
+# Call a REST API directly (credentials are read from environment variables):
+REST_API_TOKEN=secret web-gateway rest https://api.example.com/items \
+  --auth bearer --pretty
+
+# Switch auth modes without changing request code:
+REST_API_KEY=secret web-gateway rest https://api.example.com/items \
+  --auth api-key --api-key-header X-API-Key
+
+# POST and QUERY methods, with safely URL-encoded repeatable parameters:
+web-gateway rest https://api.example.com/search --method POST \
+  --parameter q=swift --header 'Content-Type: application/json' \
+  --body '{"limit":10}'
+web-gateway rest https://api.example.com/search --method QUERY \
+  --parameter 'q=swift http' --body '{"filter":"recent"}'
+
 # Manage strategies:
 web-gateway strategy list
 web-gateway strategy show https://example.com/news
@@ -28,14 +43,38 @@ web-gateway config init
 web-gateway config show
 ```
 
+The `rest` command bypasses strategy learning and SQLite. It supports HTTP
+methods including `GET`, `POST`, and `QUERY`, repeatable URL-encoded
+`--parameter` and `--header` options, `--body` or `--body-file`, and
+`none`, `bearer`, `basic`, and `api-key` authentication. The default credential
+variables are `REST_API_TOKEN`, `REST_API_USERNAME`, `REST_API_PASSWORD`, and
+`REST_API_KEY`; each variable name can be overridden with the corresponding
+`--*-env` option.
+
+For example, the following command stores only the variable name in its
+arguments; the credential value is supplied by the environment:
+
+```bash
+MY_SERVICE_TOKEN=secret web-gateway rest https://api.example.com/private \
+  --auth bearer --token-env MY_SERVICE_TOKEN
+```
+
+With a local secret manager, inject the same variable at process launch rather
+than writing the value in shell history or a config file:
+
+```bash
+kinko exec --env MY_SERVICE_TOKEN -- web-gateway rest \
+  https://api.example.com/private --auth bearer --token-env MY_SERVICE_TOKEN
+```
+
 Scraping backends: plain HTTP (default), Firecrawl (`FIRECRAWL_API_KEY`),
-ZenRows (`ZENROWS_API_KEY`), and Cloudflare Kitesurf through Browser Run
-(`CLOUDFLARE_ACCOUNT_ID` and `CLOUDFLARE_API_TOKEN`). Strategies pick an
-ordered backend chain. Kitesurf is the browser-rendering backend; configure
-the token with `Browser Rendering - Edit` permission and select `kitesurf` in
-a strategy when JavaScript rendering is required. The default chain tries
-plain HTTP first for feeds and static pages, then Kitesurf as its browser
-fallback.
+ZenRows (`ZENROWS_API_KEY`), Playwright, Cloudflare Kitesurf through Browser
+Run (`CLOUDFLARE_ACCOUNT_ID` and `CLOUDFLARE_API_TOKEN`), and
+`agent-browser`. Strategies pick an ordered backend chain and may explicitly
+select `playwright`, `kitesurf`, or `agent-browser` for JavaScript-rendered
+pages. Kitesurf remains the primary browser backend: the default chain tries
+plain HTTP first, then Kitesurf. Run `mise run browser:install` once before
+using either local browser backend.
 
 Strategy learning runs through
 [tacogips/agent-gateway](https://github.com/tacogips/agent-gateway) hosted

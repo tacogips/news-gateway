@@ -17,11 +17,20 @@ fi
 '''
 
 [tools]
+"npm:agent-browser" = { version = "latest", allow_builds = ["agent-browser"] }
+"npm:playwright" = "latest"
 node = "lts"
 swift = "6.3.3"
 swiftlint = "latest"
 gitleaks = "latest"
 wrangler = "latest"
+
+[tasks."browser:install"]
+description = "Install local browser engines for agent-browser and Playwright"
+run = '''
+agent-browser install
+playwright install chromium
+'''
 
 [tasks.default]
 description = "Show available tasks"

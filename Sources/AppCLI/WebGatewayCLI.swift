@@ -8,6 +8,6 @@ struct WebGatewayCLI: AsyncParsableCommand {
     commandName: "web-gateway",
     abstract: "News collection gateway with LLM-learned, SQLite-persisted fetch strategies.",
     version: Version.current,
-    subcommands: [FetchCommand.self, StrategyCommand.self, ConfigCommand.self]
+    subcommands: [FetchCommand.self, RESTCommand.self, StrategyCommand.self, ConfigCommand.self]
   )
 }

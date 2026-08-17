@@ -41,8 +41,9 @@ import Testing
   }
 }
 
-@Test func legacyPlaywrightBackendNameMigratesToKitesurf() throws {
-  let backend = try JSONCoding.decoder.decode(BackendName.self, from: Data(#""playwright""#.utf8))
-  #expect(backend == .kitesurf)
-  #expect(try JSONCoding.encoder.encode(backend) == Data(#""kitesurf""#.utf8))
+@Test func browserBackendNamesRemainDistinctAndCodable() throws {
+  let names: [BackendName] = [.playwright, .kitesurf, .agentBrowser]
+  let encoded = try JSONCoding.encoder.encode(names)
+  #expect(String(decoding: encoded, as: UTF8.self) == #"["playwright","kitesurf","agent-browser"]"#)
+  #expect(try JSONCoding.decoder.decode([BackendName].self, from: encoded) == names)
 }

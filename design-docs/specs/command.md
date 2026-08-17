@@ -10,6 +10,10 @@ Accepted (initial implementation)
 web-gateway fetch <url> [--count N] [--learn-if-missing] [--relearn-on-failure]
                          [--max-attempts N] [--pretty]
                          [--config PATH] [--db PATH]
+web-gateway rest <url> [--method METHOD] [--parameter 'NAME=VALUE']
+                       [--header 'NAME: VALUE']
+                       [--auth none|bearer|basic|api-key]
+                       [--body TEXT | --body-file PATH] [--pretty]
 web-gateway strategy list [--json]
 web-gateway strategy show <id-or-url> [--json]
 web-gateway strategy learn <url> [--count N] [--hints TEXT]
@@ -32,6 +36,11 @@ Common options: `--config PATH` (default
 
 - `fetch`: loads (or learns, with `--learn-if-missing`) the strategy for the
   URL and prints a `FetchOutput` JSON document to stdout. Always JSON.
+- `rest`: performs one direct HTTP request without a strategy, database, or
+  LLM. It supports `GET`, `POST`, `QUERY`, and other valid HTTP method tokens,
+  with repeatable URL query parameters. Successful response bytes are written
+  to stdout. Authentication is selected with `--auth`; secrets are loaded from
+  environment variables.
 - `strategy learn`: learns and persists a strategy, printing the stored
   strategy as JSON. `--schema-file` supplies a required output JSON schema for
   the items; `--hints` passes free-text guidance to the learner.
